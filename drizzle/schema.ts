@@ -1,17 +1,7 @@
-import { int, mysqlEnum, mysqlTable, text, timestamp, varchar } from "drizzle-orm/mysql-core";
+import { int, mysqlEnum, mysqlTable, text, timestamp, varchar, float } from "drizzle-orm/mysql-core";
 
-/**
- * Core user table backing auth flow.
- * Extend this file with additional tables as your product grows.
- * Columns use camelCase to match both database fields and generated types.
- */
 export const users = mysqlTable("users", {
-  /**
-   * Surrogate primary key. Auto-incremented numeric value managed by the database.
-   * Use this for relations between tables.
-   */
   id: int("id").autoincrement().primaryKey(),
-  /** Manus OAuth identifier (openId) returned from the OAuth callback. Unique per user. */
   openId: varchar("openId", { length: 64 }).notNull().unique(),
   name: text("name"),
   email: varchar("email", { length: 320 }),
@@ -25,4 +15,31 @@ export const users = mysqlTable("users", {
 export type User = typeof users.$inferSelect;
 export type InsertUser = typeof users.$inferInsert;
 
-// TODO: Add your tables here
+export const verifications = mysqlTable("verifications", {
+  id: int("id").autoincrement().primaryKey(),
+  claim: text("claim").notNull(),
+  status: mysqlEnum("status", ["pending", "processing", "completed", "failed"]).default("pending").notNull(),
+  verdict: mysqlEnum("verdict", ["Doğrulandı", "Şüpheli", "Yanlış"]),
+  reliabilityScore: float("reliabilityScore"),
+  summary: text("summary"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type Verification = typeof verifications.$inferSelect;
+export type InsertVerification = typeof verifications.$inferInsert;
+
+export const agentResults = mysqlTable("agent_results", {
+  id: int("id").autoincrement().primaryKey(),
+  verificationId: int("verificationId").notNull(),
+  agentType: mysqlEnum("agentType", ["source", "logic", "crosscheck"]).notNull(),
+  agentName: varchar("agentName", { length: 128 }).notNull(),
+  score: float("score").notNull(),
+  findings: text("findings").notNull(),
+  sources: text("sources"),
+  status: mysqlEnum("status", ["pending", "running", "completed", "failed"]).default("pending").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type AgentResult = typeof agentResults.$inferSelect;
+export type InsertAgentResult = typeof agentResults.$inferInsert;
