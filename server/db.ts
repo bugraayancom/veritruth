@@ -109,3 +109,18 @@ export async function getAgentResultsByVerificationId(verificationId: number) {
   if (!db) throw new Error("Database not available");
   return db.select().from(agentResults).where(eq(agentResults.verificationId, verificationId));
 }
+
+// --- Cosmos blockchain anchor helpers ---
+
+export async function anchorVerificationOnChain(
+  id: number,
+  txHash: string,
+  cosmosAddress: string
+) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  await db
+    .update(verifications)
+    .set({ txHash, cosmosAddress, anchoredAt: new Date() })
+    .where(eq(verifications.id, id));
+}

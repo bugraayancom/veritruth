@@ -24,3 +24,14 @@
 ## Test
 - [x] Vitest: consensus mekanizması testleri (6 test)
 - [x] Vitest: auth.logout testleri (1 test)
+
+## Cosmos Blockchain Entegrasyonu
+- [x] CosmJS bağımlılıklarını ekle (@cosmjs/stargate, @cosmjs/proto-signing, @cosmjs/encoding)
+- [x] server/cosmos.ts: Cosmos testnet bağlantısı ve on-chain kayıt servisi
+- [x] drizzle/schema.ts: verifications tablosuna txHash ve cosmosAddress alanları ekle
+- [x] DB migration uygula
+- [x] tRPC router: cosmos.buildAnchorParams, cosmos.recordAnchor, cosmos.getChainStatus, cosmos.verifyAnchor
+- [x] Frontend: CosmosWallet.tsx - Keplr cüzdan bağlantı bileşeni
+- [x] Frontend: Result sayfasına "Anchor to Cosmos" butonu ve on-chain kayıt UI
+- [x] Frontend: Zincir durumu göstergesi (bağlı ağ, blok yüksekliği)
+- [x] README.md güncelle - Cosmos entegrasyonu bölümü ekle

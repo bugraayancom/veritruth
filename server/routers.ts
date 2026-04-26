@@ -11,9 +11,16 @@ import {
   createAgentResult,
   updateAgentResult,
   getAgentResultsByVerificationId,
+  anchorVerificationOnChain,
 } from "./db";
 import { runAllAgents } from "./agents";
 import { computeConsensus } from "./consensus";
+import {
+  getChainStatus,
+  buildVerificationProof,
+  buildAnchorTxParams,
+  verifyOnChainAnchor,
+} from "./cosmos";
 
 export const appRouter = router({
   system: systemRouter,
@@ -27,20 +34,17 @@ export const appRouter = router({
   }),
 
   verify: router({
-    // Yeni iddia gönder ve analiz başlat
     submit: publicProcedure
       .input(z.object({ claim: z.string().min(10).max(2000) }))
       .mutation(async ({ input }) => {
-        // 1. Verification kaydı oluştur
         const verificationId = await createVerification(input.claim);
         await updateVerificationStatus(verificationId, { status: "processing" });
 
-        // 2. Ajan placeholder kayıtları oluştur
         const agentTypes = ["source", "logic", "crosscheck"] as const;
         const agentNames: Record<string, string> = {
-          source: "Kaynak Doğrulama Ajanı",
-          logic: "Mantıksal Tutarlılık Ajanı",
-          crosscheck: "Çapraz Doğrulama Ajanı",
+          source: "Source Verification Agent",
+          logic: "Logical Consistency Agent",
+          crosscheck: "Cross-Verification Agent",
         };
         const agentIds: Record<string, number> = {};
         for (const type of agentTypes) {
@@ -56,7 +60,6 @@ export const appRouter = router({
           agentIds[type] = id;
         }
 
-        // 3. Ajanları çalıştır (arka planda, sonucu DB'ye yaz)
         runAllAgents(input.claim)
           .then(async (results) => {
             for (const result of results) {
@@ -70,7 +73,6 @@ export const appRouter = router({
                 });
               }
             }
-            // 4. Konsensüs hesapla
             const consensus = computeConsensus(results);
             await updateVerificationStatus(verificationId, {
               status: "completed",
@@ -87,7 +89,6 @@ export const appRouter = router({
         return { verificationId };
       }),
 
-    // Tek bir verification'ı getir (polling için)
     getById: publicProcedure
       .input(z.object({ id: z.number() }))
       .query(async ({ input }) => {
@@ -97,11 +98,87 @@ export const appRouter = router({
         return { verification, agents };
       }),
 
-    // Geçmiş doğrulamalar
     history: publicProcedure
       .input(z.object({ limit: z.number().optional() }))
       .query(async ({ input }) => {
         return getVerificationHistory(input.limit ?? 20);
+      }),
+  }),
+
+  cosmos: router({
+    /**
+     * Returns current Cosmos testnet chain status (block height, chain ID).
+     */
+    getChainStatus: publicProcedure.query(async () => {
+      return getChainStatus();
+    }),
+
+    /**
+     * Builds the proof object and Keplr transaction params for the frontend to sign.
+     * The actual signing and broadcasting is done client-side via Keplr.
+     */
+    buildAnchorParams: publicProcedure
+      .input(
+        z.object({
+          verificationId: z.number(),
+          cosmosAddress: z.string().min(1),
+        })
+      )
+      .mutation(async ({ input }) => {
+        const verification = await getVerificationById(input.verificationId);
+        if (!verification) throw new Error("Verification not found");
+        if (verification.status !== "completed") {
+          throw new Error("Verification must be completed before anchoring");
+        }
+
+        const proof = buildVerificationProof({
+          verificationId: verification.id,
+          claim: verification.claim,
+          reliabilityScore: verification.reliabilityScore ?? 0,
+          verdict: verification.verdict ?? "Suspicious",
+          agentCount: 3,
+        });
+
+        const txParams = buildAnchorTxParams({
+          senderAddress: input.cosmosAddress,
+          proof,
+        });
+
+        return { proof, txParams };
+      }),
+
+    /**
+     * After the user broadcasts the transaction via Keplr, they submit the
+     * txHash here so we can record it in the database.
+     */
+    recordAnchor: publicProcedure
+      .input(
+        z.object({
+          verificationId: z.number(),
+          txHash: z.string().min(1),
+          cosmosAddress: z.string().min(1),
+        })
+      )
+      .mutation(async ({ input }) => {
+        await anchorVerificationOnChain(
+          input.verificationId,
+          input.txHash,
+          input.cosmosAddress
+        );
+        return {
+          success: true,
+          txHash: input.txHash,
+          explorerUrl: `https://explorer.polypore.xyz/theta-testnet-001/tx/${input.txHash}`,
+        };
+      }),
+
+    /**
+     * Verifies an on-chain anchor by looking up the transaction on the testnet.
+     */
+    verifyAnchor: publicProcedure
+      .input(z.object({ txHash: z.string() }))
+      .query(async ({ input }) => {
+        return verifyOnChainAnchor(input.txHash);
       }),
   }),
 });

@@ -22,6 +22,13 @@
       "when": 1777190240278,
       "tag": "0002_adorable_lady_mastermind",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1777192291992,
+      "tag": "0003_famous_blue_blade",
+      "breakpoints": true
     }
   ]
 }

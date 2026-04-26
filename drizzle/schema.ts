@@ -22,6 +22,9 @@ export const verifications = mysqlTable("verifications", {
   verdict: mysqlEnum("verdict", ["Verified", "Suspicious", "False"]),
   reliabilityScore: float("reliabilityScore"),
   summary: text("summary"),
+  txHash: varchar("txHash", { length: 128 }),
+  cosmosAddress: varchar("cosmosAddress", { length: 128 }),
+  anchoredAt: timestamp("anchoredAt"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });

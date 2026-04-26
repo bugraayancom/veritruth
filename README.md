@@ -1,129 +1,202 @@
-# VeriTruth — Merkeziyetsiz Epistemik Doğrulama Ağı
+# VeriTruth — Decentralized Epistemic Verification Network
 
-> **Cosmos Grants — Truth-seeking: Cosmos × FIRE Stream**
+> **Cosmos Grants Application — Truth-seeking: Cosmos × FIRE Stream**
 
-VeriTruth, yapay zeka destekli dezenformasyona karşı mücadele eden, çok ajanlı ve merkeziyetsiz bir doğrulama platformudur. Uzmanlaşmış AI ajanları, her iddiayı paralel olarak analiz ederek şeffaf ve manipüle edilemez bir **Proof of Reliability** skoru üretir.
-
----
-
-## Proje Vizyonu
-
-İnternet, yapay zeka destekli dezenformasyonun (AI-driven disinformation) hızla yayıldığı bir ortama dönüşmüştür. Geleneksel doğrulama platformları merkezi, şeffaf olmayan ve sansüre açık yapılarıyla bu tehdide yeterince yanıt verememektedir. VeriTruth, bu sorunu üç temel prensiple çözer:
-
-- **Merkeziyetsizlik:** Doğrulama gücü tek bir kuruma değil, bağımsız AI ajanlarından oluşan bir ağa dağıtılır.
-- **Şeffaflık:** Her ajanın analiz adımları ve kullandığı kaynaklar açıkça raporlanır.
-- **Özerklik:** Ajanlar, Agent Economy prensiplerine uygun olarak bağımsız ekonomik aktörler olarak tasarlanmıştır.
+VeriTruth is a multi-agent, decentralized fact-verification platform that combats AI-driven disinformation. Specialized AI agents analyze each claim in parallel and produce a transparent, tamper-resistant **Proof of Reliability** score. Completed verifications are permanently anchored on the Cosmos blockchain via Keplr wallet.
 
 ---
 
-## Akademik Temeller
+## Project Vision
 
-Bu proje, 2025–2026 yıllarında yayınlanan güncel akademik araştırmalara dayanmaktadır:
+The internet is increasingly vulnerable to AI-generated disinformation. Traditional fact-checking platforms are centralized, opaque, and susceptible to censorship. VeriTruth addresses this with three core principles:
 
-| Makale | Yıl | Katkı |
-|--------|-----|-------|
-| [The Agent Economy](https://arxiv.org/abs/2602.14219) — Xu | 2026 | Blockchain tabanlı otonom ajan ekonomisi mimarisi |
-| [NANDA Index Architecture](https://arxiv.org/abs/2508.03101) — Wang vd. | 2025 | Merkeziyetsiz ajan keşfi ve Zero Trust güvenlik |
-| [SREE Framework](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5415074) — Morin | 2025 | Epistemik sürüklenmeyi önleyen özyinelemeli doğrulama |
-| [AI-driven Disinformation](https://www.frontiersin.org/articles/10.3389/frai.2025.1569115) — Romanishyn vd. | 2025 | Demokratik dayanıklılık için politika önerileri |
-| [TruthChain](https://ieeexplore.ieee.org/abstract/document/11176464/) — Murugalakshmi vd. | 2025 | Blockchain tabanlı haber doğrulama sistemi |
+**Decentralization** — Verification power is distributed across a network of independent AI agents rather than a single authority. **Transparency** — Every agent's reasoning steps and sources are fully reported. **Autonomy** — Agents are designed as independent epistemic actors aligned with Agent Economy principles.
 
 ---
 
-## Özellikler
+## Academic Foundations
 
-- **İddia Giriş Formu** — Kullanıcıların metin veya haber iddiası girebildiği ana sayfa formu
-- **Çoklu AI Ajan Analizi** — 3 uzmanlaşmış ajan paralel olarak çalışır:
-  - Kaynak Doğrulama Ajanı
-  - Mantıksal Tutarlılık Ajanı
-  - Çapraz Doğrulama Ajanı
-- **Canlı Analiz Akışı** — Ajanların çalışma sürecini adım adım gösteren gerçek zamanlı arayüz
-- **Konsensüs Mekanizması** — Ağırlıklı ortalama ile Proof of Reliability skoru hesaplama
-- **Doğrulama Sonuç Raporu** — Her ajanın bulgularını, skoru ve nihai kararı gösteren detaylı rapor
-- **Geçmiş Doğrulamalar** — Daha önce analiz edilen iddiaların veritabanında saklanması ve listelenmesi
+This project is grounded in peer-reviewed research published in 2025–2026:
 
-### Karar Kriterleri
-
-| Karar | Proof of Reliability | Açıklama |
-|-------|---------------------|----------|
-| **Doğrulandı** | ≥ 70 | İddia güvenilir kaynaklara dayanıyor, mantıksal tutarlı |
-| **Şüpheli** | 40–69 | İddia belirsiz, çelişkili kaynaklar mevcut |
-| **Yanlış** | < 40 | İddia güvenilir kaynaklarla çelişiyor, manipülasyon tespit edildi |
+| Paper | Year | Contribution |
+|---|---|---|
+| [The Agent Economy](https://arxiv.org/abs/2602.14219) — Xu | 2026 | Blockchain-based autonomous agent economy architecture |
+| [NANDA Index Architecture](https://arxiv.org/abs/2508.03101) — Wang et al. | 2025 | Decentralized agent discovery and Zero Trust security |
+| [SREE Framework](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5415074) — Morin | 2025 | Recursive verification to prevent epistemic drift |
+| [AI-driven Disinformation](https://www.frontiersin.org/articles/10.3389/frai.2025.1569115) — Romanishyn et al. | 2025 | Policy recommendations for democratic resilience |
+| [TruthChain](https://ieeexplore.ieee.org/abstract/document/11176464/) — Murugalakshmi et al. | 2025 | Blockchain-based news verification system |
 
 ---
 
-## Teknoloji Yığını
+## Features
 
-- **Frontend:** React 19, TypeScript, Tailwind CSS 4, shadcn/ui
-- **Backend:** Node.js, Express, tRPC 11
-- **Veritabanı:** MySQL (Drizzle ORM)
-- **AI:** OpenAI API, Google Gemini API (invokeLLM ile soyutlanmış)
-- **Mimari:** NANDA tabanlı çok ajanlı sistem, SREE epistemik doğrulama mantığı
+**Claim Input Form** — A clean homepage form where users submit any text claim or news statement for analysis.
+
+**Multi-Agent AI Analysis** — Three specialized agents run in parallel using OpenAI and Gemini APIs:
+- Source Verification Agent — assesses source credibility and citation quality
+- Logical Consistency Agent — detects logical fallacies and internal contradictions
+- Cross-Verification Agent — compares the claim against independent data points
+
+**Live Analysis Stream** — A real-time progress interface showing each agent's status step by step.
+
+**Consensus Mechanism** — A weighted-average algorithm computes the final Proof of Reliability score and verdict.
+
+**Verification Result Report** — A detailed report showing each agent's findings, individual scores, and the final consensus decision.
+
+**Verification History** — All past analyses are stored in the database and accessible from the history page.
+
+**Cosmos Blockchain Anchor** — After analysis, users can anchor their verification result permanently on the Cosmos blockchain via Keplr wallet.
+
+### Verdict Criteria
+
+| Verdict | Proof of Reliability | Description |
+|---|---|---|
+| **Verified** | ≥ 70 | Claim is supported by credible sources and is logically consistent |
+| **Suspicious** | 40–69 | Claim is ambiguous or has conflicting sources |
+| **False** | < 40 | Claim is contradicted by evidence or logically incoherent |
 
 ---
 
-## Kurulum
+## Cosmos Blockchain Integration
 
-### Gereksinimler
+VeriTruth integrates with the Cosmos ecosystem to provide immutable, on-chain proof of each verification result.
 
-- Node.js 18+
-- pnpm
-- MySQL veritabanı
+### How It Works
 
-### Adımlar
+When a verification is completed, the user can anchor the result on-chain by connecting their Keplr wallet. The platform builds a compact proof object containing a SHA-256 hash of the claim, the Proof of Reliability score, the verdict, and a timestamp. This proof is broadcast as the memo of a minimal self-transfer transaction on the Cosmos network.
+
+```json
+{
+  "app": "veritruth",
+  "version": "1.0",
+  "id": 42,
+  "claim_hash": "a3f8c1d2e4b5f6a7",
+  "score": 82,
+  "verdict": "Verified",
+  "agents": 3,
+  "ts": 1745658000
+}
+```
+
+### Network Configuration
+
+| Parameter | Value |
+|---|---|
+| Primary Network | Cosmos Hub Testnet (theta-testnet-001) |
+| Fallback RPC | `https://cosmos-rpc.publicnode.com:443` |
+| Explorer | [explorer.polypore.xyz](https://explorer.polypore.xyz/theta-testnet-001) |
+| Wallet | Keplr browser extension |
+| Transaction Type | MsgSend self-transfer with proof memo |
+
+### Anchoring Flow
+
+1. User completes a claim analysis on VeriTruth.
+2. On the result page, user clicks **"Anchor to Cosmos"** and connects their Keplr wallet.
+3. The backend generates the proof JSON and transaction parameters.
+4. Keplr prompts the user to sign a minimal self-transfer with the proof as memo.
+5. The transaction hash is recorded in the VeriTruth database alongside the verification.
+6. The user receives a direct link to view the anchored transaction on the Cosmos Explorer.
+
+### Why Cosmos?
+
+Cosmos was chosen for its IBC interoperability, low transaction fees, and alignment with the decentralized, open-source ethos of this project. The Cosmos Grants Truth-seeking stream directly supports projects that use blockchain infrastructure to combat epistemic manipulation — which is the core mission of VeriTruth.
+
+---
+
+## Architecture
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                        VeriTruth Platform                       │
+├─────────────────────────────────────────────────────────────────┤
+│  Frontend (React 19 + Tailwind 4)                               │
+│  ├── Claim Input Form                                           │
+│  ├── Live Analysis Stream (polling)                             │
+│  ├── Result Report + CosmosWallet (Keplr)                       │
+│  └── Verification History                                       │
+├─────────────────────────────────────────────────────────────────┤
+│  Backend (Express + tRPC)                                       │
+│  ├── verify.submit → runAllAgents() → computeConsensus()        │
+│  ├── cosmos.getChainStatus → StargateClient (CosmJS)            │
+│  ├── cosmos.buildAnchorParams → SHA-256 proof generation        │
+│  └── cosmos.recordAnchor → persist txHash to DB                 │
+├─────────────────────────────────────────────────────────────────┤
+│  AI Agent Layer                                                 │
+│  ├── Source Verification Agent (OpenAI GPT-4o)                  │
+│  ├── Logical Consistency Agent (Gemini 1.5 Pro)                 │
+│  └── Cross-Verification Agent (OpenAI GPT-4o)                   │
+├─────────────────────────────────────────────────────────────────┤
+│  Cosmos Blockchain Layer                                        │
+│  └── On-chain proof anchor via Keplr + CosmJS SigningStargateClient │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Frontend | React 19, Tailwind CSS 4, shadcn/ui |
+| Backend | Node.js, Express 4, tRPC 11 |
+| Database | MySQL (TiDB) via Drizzle ORM |
+| AI Agents | OpenAI GPT-4o, Google Gemini 1.5 Pro |
+| Blockchain | Cosmos Hub, CosmJS, Keplr Wallet |
+| Testing | Vitest |
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js 22+
+- pnpm 10+
+- Keplr browser extension (for blockchain anchoring)
+- OpenAI API key
+- Google Gemini API key
+
+### Installation
 
 ```bash
-# Repoyu klonla
-git clone https://github.com/<kullanici>/veritruth.git
+git clone https://github.com/bugraayancom/veritruth.git
 cd veritruth
-
-# Bağımlılıkları yükle
 pnpm install
-
-# Ortam değişkenlerini ayarla
 cp .env.example .env
-# .env dosyasını düzenle
-
-# Veritabanı migrasyonlarını çalıştır
-pnpm drizzle-kit migrate
-
-# Geliştirme sunucusunu başlat
+# Fill in your API keys in .env
 pnpm dev
 ```
 
----
+### Environment Variables
 
-## Ortam Değişkenleri
-
-`.env.example` dosyasına bakın.
+See [`.env.example`](.env.example) for all required variables.
 
 ---
 
-## Testler
+## Cosmos Grants Alignment
 
-```bash
-pnpm test
-```
+This project directly addresses the **Truth-seeking: Cosmos × FIRE** grant stream:
 
----
+**Epistemic integrity** — VeriTruth uses a multi-agent consensus mechanism to resist single points of failure and manipulation, directly combating AI-generated disinformation.
 
-## Cosmos Grants Uyumu
+**Blockchain accountability** — Verification results are anchored on-chain, creating an immutable public record that cannot be altered or censored.
 
-Bu proje, Cosmos Grants'in **Truth-seeking: Cosmos × FIRE Stream** programının şu hedefleriyle doğrudan uyumludur:
+**Open-source ecosystem** — The entire codebase is MIT-licensed and designed for community extension, including adding new agent types, supporting additional LLM providers, and integrating with IBC-connected chains.
 
-- **Gerçek Arayışı (Truth-seeking):** Yapay zeka destekli dezenformasyona karşı merkeziyetsiz doğrulama ağı
-- **Merkeziyetsizlik:** Doğrulama gücü bağımsız AI ajanlarına dağıtılmış
-- **Özerklik:** Agent Economy prensiplerine uygun ajan tasarımı
-- **Açık Kaynak:** MIT lisansı ile tamamen açık kaynak
+**Academic grounding** — The project is built on five peer-reviewed papers from 2025–2026, demonstrating rigorous research alignment.
 
 ---
 
-## Lisans
+## Roadmap
 
-MIT License — Açık kaynak ve serbestçe kullanılabilir.
+**Phase 1 (Current MVP):** Multi-agent analysis, Proof of Reliability score, Cosmos blockchain anchoring via Keplr.
+
+**Phase 2:** CosmWasm smart contract for on-chain verification registry; decentralized agent staking and slashing.
+
+**Phase 3:** IBC integration to broadcast verification results across Cosmos-connected chains; DAO governance for agent parameter updates.
 
 ---
 
-## Atıf
+## License
 
-Bu proje, Cosmos Institute'un insanlığın gelişimi için gerçeği arayan, özerk ve merkeziyetsiz sistemlere olan inancından ilham almaktadır.
+MIT © 2026 VeriTruth Contributors
