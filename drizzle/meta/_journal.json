@@ -15,6 +15,13 @@
       "when": 1777152226922,
       "tag": "0001_pretty_timeslip",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1777190240278,
+      "tag": "0002_adorable_lady_mastermind",
+      "breakpoints": true
     }
   ]
 }

@@ -19,7 +19,7 @@ export const verifications = mysqlTable("verifications", {
   id: int("id").autoincrement().primaryKey(),
   claim: text("claim").notNull(),
   status: mysqlEnum("status", ["pending", "processing", "completed", "failed"]).default("pending").notNull(),
-  verdict: mysqlEnum("verdict", ["Doğrulandı", "Şüpheli", "Yanlış"]),
+  verdict: mysqlEnum("verdict", ["Verified", "Suspicious", "False"]),
   reliabilityScore: float("reliabilityScore"),
   summary: text("summary"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),

@@ -4,7 +4,7 @@ import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
-import { Shield, Zap, Search, ChevronRight, Clock, CheckCircle, AlertTriangle, XCircle } from "lucide-react";
+import { Shield, Zap, Search, ChevronRight, CheckCircle, AlertTriangle, XCircle } from "lucide-react";
 
 export default function Home() {
   const [claim, setClaim] = useState("");
@@ -15,14 +15,14 @@ export default function Home() {
       navigate(`/verify/${data.verificationId}`);
     },
     onError: (err) => {
-      toast.error("Analiz başlatılamadı: " + err.message);
+      toast.error("Failed to start analysis: " + err.message);
     },
   });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (claim.trim().length < 10) {
-      toast.error("Lütfen en az 10 karakter uzunluğunda bir iddia girin.");
+      toast.error("Please enter a claim of at least 10 characters.");
       return;
     }
     submitMutation.mutate({ claim: claim.trim() });
@@ -41,10 +41,10 @@ export default function Home() {
           </div>
           <div className="flex items-center gap-6">
             <a href="/history" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-              Geçmiş
+              History
             </a>
             <a
-              href="https://github.com"
+              href="https://github.com/bugraayancom/veritruth"
               target="_blank"
               rel="noopener noreferrer"
               className="text-sm text-muted-foreground hover:text-foreground transition-colors"
@@ -57,7 +57,6 @@ export default function Home() {
 
       {/* Hero */}
       <section className="relative overflow-hidden">
-        {/* Background glow */}
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-primary/5 rounded-full blur-3xl" />
         </div>
@@ -67,37 +66,38 @@ export default function Home() {
             {/* Badge */}
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-medium mb-8">
               <Zap className="w-3 h-3" />
-              Çok Ajanlı AI Doğrulama Sistemi
+              Multi-Agent AI Verification System
             </div>
 
             <h1 className="text-5xl md:text-6xl font-bold tracking-tight mb-6 leading-tight">
-              Gerçeği{" "}
-              <span className="gradient-text font-serif italic">Doğrula</span>
+              <span className="gradient-text font-serif italic">Verify</span>{" "}
+              the Truth
               <br />
-              Dezenformasyonu{" "}
-              <span className="gradient-text font-serif italic">Engelle</span>
+              <span className="gradient-text font-serif italic">Combat</span>{" "}
+              Disinformation
             </h1>
 
             <p className="text-lg text-muted-foreground mb-12 max-w-2xl mx-auto leading-relaxed">
-              VeriTruth, uzmanlaşmış AI ajanlarının paralel analiz yaptığı merkeziyetsiz bir doğrulama ağıdır.
-              Her iddia, kaynak, mantık ve çapraz doğrulama perspektiflerinden değerlendirilerek{" "}
-              <strong className="text-foreground">Proof of Reliability</strong> skoru hesaplanır.
+              VeriTruth is a decentralized verification network where specialized AI agents analyze
+              every claim in parallel — evaluating source credibility, logical consistency, and
+              cross-referenced evidence to produce a transparent{" "}
+              <strong className="text-foreground">Proof of Reliability</strong> score.
             </p>
 
             {/* Main Form */}
             <form onSubmit={handleSubmit} className="glass-card rounded-2xl p-6 text-left">
               <label className="block text-sm font-medium text-muted-foreground mb-3">
-                Doğrulanmasını istediğiniz iddia veya haberi girin
+                Enter the claim or news headline you want to verify
               </label>
               <Textarea
                 value={claim}
                 onChange={(e) => setClaim(e.target.value)}
-                placeholder="Örnek: 'Türkiye'nin nüfusu 2025 yılında 90 milyonu aştı.' veya herhangi bir haber başlığı, sosyal medya paylaşımı..."
+                placeholder="e.g. 'Scientists confirm coffee reverses aging effects' or any news headline, social media post, or statement..."
                 className="min-h-[120px] bg-background/50 border-border/50 resize-none text-foreground placeholder:text-muted-foreground/50 focus:border-primary/50 focus:ring-primary/20 text-sm leading-relaxed"
                 maxLength={2000}
               />
               <div className="flex items-center justify-between mt-4">
-                <span className="text-xs text-muted-foreground">{claim.length}/2000 karakter</span>
+                <span className="text-xs text-muted-foreground">{claim.length}/2000 characters</span>
                 <Button
                   type="submit"
                   disabled={submitMutation.isPending || claim.trim().length < 10}
@@ -106,12 +106,12 @@ export default function Home() {
                   {submitMutation.isPending ? (
                     <>
                       <div className="w-4 h-4 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
-                      Analiz Başlatılıyor...
+                      Starting Analysis...
                     </>
                   ) : (
                     <>
                       <Search className="w-4 h-4" />
-                      Analiz Et
+                      Analyze Claim
                       <ChevronRight className="w-4 h-4" />
                     </>
                   )}
@@ -125,30 +125,30 @@ export default function Home() {
       {/* How it works */}
       <section className="container py-20 border-t border-border/30">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-2xl font-semibold text-center mb-3">Nasıl Çalışır?</h2>
+          <h2 className="text-2xl font-semibold text-center mb-3">How It Works</h2>
           <p className="text-muted-foreground text-center mb-12 text-sm">
-            NANDA mimarisi ve SREE metodolojisi ile güçlendirilmiş çok ajanlı analiz sistemi
+            Powered by NANDA architecture and SREE epistemic methodology
           </p>
           <div className="grid md:grid-cols-3 gap-6">
             {[
               {
                 icon: <Search className="w-5 h-5" />,
-                title: "Kaynak Doğrulama",
-                desc: "İddianın kaynakları, güvenilirliği ve bağlamı analiz edilir. Kaynak manipülasyonu tespit edilir.",
+                title: "Source Verification",
+                desc: "Analyzes the origin, credibility, and context of the claim. Detects source manipulation and fabricated citations.",
                 color: "text-primary",
                 bg: "bg-primary/10",
               },
               {
                 icon: <Zap className="w-5 h-5" />,
-                title: "Mantıksal Tutarlılık",
-                desc: "Argümanların iç tutarlılığı, mantıksal safsatalar ve manipülatif dil kalıpları incelenir.",
+                title: "Logical Consistency",
+                desc: "Examines internal coherence of arguments, logical fallacies, and manipulative language patterns.",
                 color: "text-chart-2",
                 bg: "bg-chart-2/10",
               },
               {
                 icon: <Shield className="w-5 h-5" />,
-                title: "Çapraz Doğrulama",
-                desc: "İddia farklı bağımsız kaynaklarla karşılaştırılır. AI üretimi dezenformasyon kalıpları aranır.",
+                title: "Cross-Verification",
+                desc: "Compares the claim against independent sources. Detects AI-generated disinformation patterns.",
                 color: "text-chart-3",
                 bg: "bg-chart-3/10",
               },
@@ -169,12 +169,12 @@ export default function Home() {
       <section className="container pb-20">
         <div className="max-w-4xl mx-auto">
           <div className="glass-card rounded-xl p-6">
-            <h3 className="text-sm font-medium text-muted-foreground mb-4">Karar Kriterleri</h3>
+            <h3 className="text-sm font-medium text-muted-foreground mb-4">Verdict Criteria</h3>
             <div className="grid sm:grid-cols-3 gap-4">
               {[
-                { label: "Doğrulandı", icon: <CheckCircle className="w-4 h-4" />, cls: "verdict-verified", desc: "Proof of Reliability ≥ 70" },
-                { label: "Şüpheli", icon: <AlertTriangle className="w-4 h-4" />, cls: "verdict-suspicious", desc: "Proof of Reliability 40–69" },
-                { label: "Yanlış", icon: <XCircle className="w-4 h-4" />, cls: "verdict-false", desc: "Proof of Reliability < 40" },
+                { label: "Verified", icon: <CheckCircle className="w-4 h-4" />, cls: "verdict-verified", desc: "Proof of Reliability ≥ 70" },
+                { label: "Suspicious", icon: <AlertTriangle className="w-4 h-4" />, cls: "verdict-suspicious", desc: "Proof of Reliability 40–69" },
+                { label: "False", icon: <XCircle className="w-4 h-4" />, cls: "verdict-false", desc: "Proof of Reliability < 40" },
               ].map((v) => (
                 <div key={v.label} className={`flex items-center gap-3 px-4 py-3 rounded-lg ${v.cls}`}>
                   {v.icon}
@@ -194,12 +194,12 @@ export default function Home() {
         <div className="container flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <Shield className="w-4 h-4" />
-            <span>VeriTruth — Merkeziyetsiz Epistemik Doğrulama Ağı</span>
+            <span>VeriTruth — Decentralized Epistemic Verification Network</span>
           </div>
           <div className="flex items-center gap-4 text-xs text-muted-foreground">
-            <span>Cosmos Grants Projesi</span>
+            <span>Cosmos Grants Project</span>
             <span>·</span>
-            <a href="https://github.com" className="hover:text-foreground transition-colors">Açık Kaynak</a>
+            <a href="https://github.com/bugraayancom/veritruth" className="hover:text-foreground transition-colors">Open Source</a>
           </div>
         </div>
       </footer>

@@ -1,0 +1,1 @@
+ALTER TABLE `verifications` MODIFY COLUMN `verdict` enum('Verified','Suspicious','False');

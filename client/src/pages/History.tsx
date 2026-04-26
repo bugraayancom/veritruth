@@ -3,24 +3,24 @@ import { Shield, CheckCircle, AlertTriangle, XCircle, Clock, ArrowRight, Search 
 import { Button } from "@/components/ui/button";
 
 function VerdictBadge({ verdict }: { verdict: string | null }) {
-  if (verdict === "Doğrulandı") return (
+  if (verdict === "Verified") return (
     <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full verdict-verified text-xs font-medium">
-      <CheckCircle className="w-3 h-3" /> Doğrulandı
+      <CheckCircle className="w-3 h-3" /> Verified
     </span>
   );
-  if (verdict === "Şüpheli") return (
+  if (verdict === "Suspicious") return (
     <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full verdict-suspicious text-xs font-medium">
-      <AlertTriangle className="w-3 h-3" /> Şüpheli
+      <AlertTriangle className="w-3 h-3" /> Suspicious
     </span>
   );
-  if (verdict === "Yanlış") return (
+  if (verdict === "False") return (
     <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full verdict-false text-xs font-medium">
-      <XCircle className="w-3 h-3" /> Yanlış
+      <XCircle className="w-3 h-3" /> False
     </span>
   );
   return (
     <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-secondary text-muted-foreground text-xs font-medium">
-      <Clock className="w-3 h-3" /> İşleniyor
+      <Clock className="w-3 h-3" /> Processing
     </span>
   );
 }
@@ -41,12 +41,12 @@ export default function History() {
               <span className="font-semibold text-lg tracking-tight">VeriTruth</span>
             </a>
             <span className="text-muted-foreground text-sm">/</span>
-            <span className="text-sm text-muted-foreground">Geçmiş</span>
+            <span className="text-sm text-muted-foreground">History</span>
           </div>
           <Button asChild size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90">
             <a href="/">
               <Search className="w-3.5 h-3.5 mr-1.5" />
-              Yeni Analiz
+              New Analysis
             </a>
           </Button>
         </div>
@@ -55,8 +55,8 @@ export default function History() {
       <div className="container py-10">
         <div className="max-w-3xl mx-auto">
           <div className="mb-8">
-            <h1 className="text-2xl font-semibold mb-1">Geçmiş Analizler</h1>
-            <p className="text-muted-foreground text-sm">Daha önce doğrulanan iddiaların listesi</p>
+            <h1 className="text-2xl font-semibold mb-1">Verification History</h1>
+            <p className="text-muted-foreground text-sm">Previously analyzed claims and their results</p>
           </div>
 
           {isLoading && (
@@ -75,9 +75,9 @@ export default function History() {
               <div className="w-12 h-12 rounded-full bg-secondary flex items-center justify-center mx-auto mb-4">
                 <Clock className="w-6 h-6 text-muted-foreground" />
               </div>
-              <div className="text-muted-foreground text-sm mb-4">Henüz hiç analiz yapılmamış.</div>
+              <div className="text-muted-foreground text-sm mb-4">No analyses have been run yet.</div>
               <Button asChild size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90">
-                <a href="/">İlk Analizini Başlat</a>
+                <a href="/">Start Your First Analysis</a>
               </Button>
             </div>
           )}
@@ -101,7 +101,7 @@ export default function History() {
                           </span>
                         )}
                         <span className="text-xs text-muted-foreground/60">
-                          {new Date(v.createdAt).toLocaleString("tr-TR")}
+                          {new Date(v.createdAt).toLocaleString("en-US")}
                         </span>
                       </div>
                     </div>

@@ -12,43 +12,43 @@ const makeAgent = (type: AgentAnalysisResult["agentType"], score: number): Agent
 });
 
 describe("computeConsensus", () => {
-  it("returns Doğrulandı when all agents score high", () => {
+  it("returns Verified when all agents score high", () => {
     const results = [
       makeAgent("source", 85),
       makeAgent("logic", 80),
       makeAgent("crosscheck", 90),
     ];
     const consensus = computeConsensus(results);
-    expect(consensus.verdict).toBe("Doğrulandı");
+    expect(consensus.verdict).toBe("Verified");
     expect(consensus.reliabilityScore).toBeGreaterThanOrEqual(70);
   });
 
-  it("returns Şüpheli when scores are in middle range", () => {
+  it("returns Suspicious when scores are in middle range", () => {
     const results = [
       makeAgent("source", 55),
       makeAgent("logic", 50),
       makeAgent("crosscheck", 60),
     ];
     const consensus = computeConsensus(results);
-    expect(consensus.verdict).toBe("Şüpheli");
+    expect(consensus.verdict).toBe("Suspicious");
     expect(consensus.reliabilityScore).toBeGreaterThanOrEqual(40);
     expect(consensus.reliabilityScore).toBeLessThan(70);
   });
 
-  it("returns Yanlış when all agents score low", () => {
+  it("returns False when all agents score low", () => {
     const results = [
       makeAgent("source", 20),
       makeAgent("logic", 15),
       makeAgent("crosscheck", 25),
     ];
     const consensus = computeConsensus(results);
-    expect(consensus.verdict).toBe("Yanlış");
+    expect(consensus.verdict).toBe("False");
     expect(consensus.reliabilityScore).toBeLessThan(40);
   });
 
   it("handles empty results gracefully", () => {
     const consensus = computeConsensus([]);
-    expect(consensus.verdict).toBe("Şüpheli");
+    expect(consensus.verdict).toBe("Suspicious");
     expect(consensus.reliabilityScore).toBe(50);
   });
 

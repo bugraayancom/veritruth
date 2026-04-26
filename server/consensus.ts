@@ -1,6 +1,6 @@
 import { AgentAnalysisResult } from "./agents";
 
-export type Verdict = "Doğrulandı" | "Şüpheli" | "Yanlış";
+export type Verdict = "Verified" | "Suspicious" | "False";
 
 export interface ConsensusResult {
   verdict: Verdict;
@@ -10,10 +10,10 @@ export interface ConsensusResult {
 
 export function computeConsensus(agentResults: AgentAnalysisResult[]): ConsensusResult {
   if (agentResults.length === 0) {
-    return { verdict: "Şüpheli", reliabilityScore: 50, summary: "Yeterli ajan sonucu bulunamadı." };
+    return { verdict: "Suspicious", reliabilityScore: 50, summary: "Insufficient agent results available." };
   }
 
-  // Ağırlıklı ortalama: kaynak %35, mantık %30, çapraz %35
+  // Weighted average: source 35%, logic 30%, crosscheck 35%
   const weights: Record<string, number> = { source: 0.35, logic: 0.30, crosscheck: 0.35 };
   let weightedSum = 0;
   let totalWeight = 0;
@@ -28,18 +28,18 @@ export function computeConsensus(agentResults: AgentAnalysisResult[]): Consensus
 
   let verdict: Verdict;
   if (reliabilityScore >= 70) {
-    verdict = "Doğrulandı";
+    verdict = "Verified";
   } else if (reliabilityScore >= 40) {
-    verdict = "Şüpheli";
+    verdict = "Suspicious";
   } else {
-    verdict = "Yanlış";
+    verdict = "False";
   }
 
   const agentSummaries = agentResults
     .map((r) => `${r.agentName}: ${r.score}/100`)
     .join(", ");
 
-  const summary = `Çoklu ajan konsensüs analizi tamamlandı. Proof of Reliability skoru: ${reliabilityScore}/100. Ajan skorları — ${agentSummaries}. Nihai karar: ${verdict}.`;
+  const summary = `Multi-agent consensus analysis complete. Proof of Reliability score: ${reliabilityScore}/100. Agent scores — ${agentSummaries}. Final verdict: ${verdict}.`;
 
   return { verdict, reliabilityScore, summary };
 }
