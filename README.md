@@ -1,105 +1,65 @@
-# VeriTruth — Decentralized Epistemic Verification Network
+<div align="center">
 
-> **Cosmos Grants Application — Truth-seeking: Cosmos × FIRE Stream**
+<br />
 
-VeriTruth is a multi-agent, decentralized fact-verification platform that combats AI-driven disinformation. Specialized AI agents analyze each claim in parallel and produce a transparent, tamper-resistant **Proof of Reliability** score. Completed verifications are permanently anchored on the Cosmos blockchain via Keplr wallet.
+<img src="https://img.shields.io/badge/VeriTruth-Decentralized%20Fact--Verification-6d28d9?style=for-the-badge&logo=ethereum&logoColor=white" alt="VeriTruth" height="32" />
 
----
+# VeriTruth
 
-## Project Vision
+### Decentralized Epistemic Verification Network
 
-The internet is increasingly vulnerable to AI-generated disinformation. Traditional fact-checking platforms are centralized, opaque, and susceptible to censorship. VeriTruth addresses this with three core principles:
+**A multi-agent AI system for combating disinformation, anchored on the Cosmos blockchain.**
 
-**Decentralization** — Verification power is distributed across a network of independent AI agents rather than a single authority. **Transparency** — Every agent's reasoning steps and sources are fully reported. **Autonomy** — Agents are designed as independent epistemic actors aligned with Agent Economy principles.
+<br />
 
----
+[![License: MIT](https://img.shields.io/badge/License-MIT-6d28d9.svg?style=flat-square)](LICENSE)
+[![CosmWasm](https://img.shields.io/badge/CosmWasm-Registry%20Contract-7c3aed?style=flat-square&logo=rust&logoColor=white)](contracts/veritruth-registry)
+[![Cosmos](https://img.shields.io/badge/Osmosis-Testnet%20osmo--test--5-5b21b6?style=flat-square)](https://testnet.mintscan.io/osmosis-testnet)
+[![OpenAI](https://img.shields.io/badge/OpenAI-GPT--4o-10b981?style=flat-square&logo=openai&logoColor=white)](https://openai.com)
+[![Gemini](https://img.shields.io/badge/Google-Gemini%201.5-3b82f6?style=flat-square&logo=google&logoColor=white)](https://deepmind.google/gemini)
+[![Tests](https://img.shields.io/badge/Tests-7%20passing-22c55e?style=flat-square)](server)
+[![Cosmos Grants](https://img.shields.io/badge/Cosmos%20Grants-Truth--seeking%20Stream-f59e0b?style=flat-square)](https://grants.cosmos.institute)
 
-## Academic Foundations
+<br />
 
-This project is grounded in peer-reviewed research published in 2025–2026:
+> *"Truth is not a matter of consensus — it is a matter of evidence, logic, and transparency."*
 
-| Paper | Year | Contribution |
-|---|---|---|
-| [The Agent Economy](https://arxiv.org/abs/2602.14219) — Xu | 2026 | Blockchain-based autonomous agent economy architecture |
-| [NANDA Index Architecture](https://arxiv.org/abs/2508.03101) — Wang et al. | 2025 | Decentralized agent discovery and Zero Trust security |
-| [SREE Framework](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5415074) — Morin | 2025 | Recursive verification to prevent epistemic drift |
-| [AI-driven Disinformation](https://www.frontiersin.org/articles/10.3389/frai.2025.1569115) — Romanishyn et al. | 2025 | Policy recommendations for democratic resilience |
-| [TruthChain](https://ieeexplore.ieee.org/abstract/document/11176464/) — Murugalakshmi et al. | 2025 | Blockchain-based news verification system |
+<br />
 
----
+[**Live Demo →**](https://veritruth-z9pjss5w.manus.space) &nbsp;·&nbsp; [**Architecture**](#architecture) &nbsp;·&nbsp; [**CosmWasm Contract**](#cosmwasm-registry-contract) &nbsp;·&nbsp; [**Getting Started**](#getting-started)
 
-## Features
+<br />
 
-**Claim Input Form** — A clean homepage form where users submit any text claim or news statement for analysis.
-
-**Multi-Agent AI Analysis** — Three specialized agents run in parallel using OpenAI and Gemini APIs:
-- Source Verification Agent — assesses source credibility and citation quality
-- Logical Consistency Agent — detects logical fallacies and internal contradictions
-- Cross-Verification Agent — compares the claim against independent data points
-
-**Live Analysis Stream** — A real-time progress interface showing each agent's status step by step.
-
-**Consensus Mechanism** — A weighted-average algorithm computes the final Proof of Reliability score and verdict.
-
-**Verification Result Report** — A detailed report showing each agent's findings, individual scores, and the final consensus decision.
-
-**Verification History** — All past analyses are stored in the database and accessible from the history page.
-
-**Cosmos Blockchain Anchor** — After analysis, users can anchor their verification result permanently on the Cosmos blockchain via Keplr wallet.
-
-### Verdict Criteria
-
-| Verdict | Proof of Reliability | Description |
-|---|---|---|
-| **Verified** | ≥ 70 | Claim is supported by credible sources and is logically consistent |
-| **Suspicious** | 40–69 | Claim is ambiguous or has conflicting sources |
-| **False** | < 40 | Claim is contradicted by evidence or logically incoherent |
+</div>
 
 ---
 
-## Cosmos Blockchain Integration
+## What is VeriTruth?
 
-VeriTruth integrates with the Cosmos ecosystem to provide immutable, on-chain proof of each verification result.
+VeriTruth is an open-source, decentralized fact-verification platform that deploys a **multi-agent AI network** to analyze claims for disinformation. Each claim is independently evaluated by three specialized AI agents — Source Verification, Logical Consistency, and Cross-Verification — whose findings are aggregated through a **Proof of Reliability** consensus mechanism. The final verdict and reliability score are then **anchored immutably on the Cosmos blockchain** via a CosmWasm smart contract, creating a censorship-resistant, auditable record of truth.
 
-### How It Works
+The project is grounded in three recent academic works:
 
-When a verification is completed, the user can anchor the result on-chain by connecting their Keplr wallet. The platform builds a compact proof object containing a SHA-256 hash of the claim, the Proof of Reliability score, the verdict, and a timestamp. This proof is broadcast as the memo of a minimal self-transfer transaction on the Cosmos network.
+| Paper | Authors | Year | Contribution to VeriTruth |
+|---|---|---|---|
+| [*The Agent Economy*](https://arxiv.org/abs/2602.14219) | Xu | 2026 | Economic model for autonomous AI agents on blockchain |
+| [*NANDA Index Architecture*](https://arxiv.org/abs/2508.03101) | Wang et al. (MIT) | 2025 | Networked agent coordination and Zero Trust security |
+| [*SREE: Self-Refining Epistemic Engine*](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5415074) | Morin | 2025 | Recursive truth-seeking and epistemic drift prevention |
+| [*AI-driven Disinformation*](https://www.frontiersin.org/articles/10.3389/frai.2025.1569115) | Romanishyn et al. | 2025 | Policy framework for democratic resilience |
+| [*TruthChain*](https://ieeexplore.ieee.org/abstract/document/11176464/) | Murugalakshmi et al. | 2025 | Blockchain-based news verification system |
 
-```json
-{
-  "app": "veritruth",
-  "version": "1.0",
-  "id": 42,
-  "claim_hash": "a3f8c1d2e4b5f6a7",
-  "score": 82,
-  "verdict": "Verified",
-  "agents": 3,
-  "ts": 1745658000
-}
-```
+---
 
-### Network Configuration
+## Key Features
 
-| Parameter | Value |
+| Feature | Description |
 |---|---|
-| Primary Network | Cosmos Hub Testnet (theta-testnet-001) |
-| Fallback RPC | `https://cosmos-rpc.publicnode.com:443` |
-| Explorer | [explorer.polypore.xyz](https://explorer.polypore.xyz/theta-testnet-001) |
-| Wallet | Keplr browser extension |
-| Transaction Type | MsgSend self-transfer with proof memo |
-
-### Anchoring Flow
-
-1. User completes a claim analysis on VeriTruth.
-2. On the result page, user clicks **"Anchor to Cosmos"** and connects their Keplr wallet.
-3. The backend generates the proof JSON and transaction parameters.
-4. Keplr prompts the user to sign a minimal self-transfer with the proof as memo.
-5. The transaction hash is recorded in the VeriTruth database alongside the verification.
-6. The user receives a direct link to view the anchored transaction on the Cosmos Explorer.
-
-### Why Cosmos?
-
-Cosmos was chosen for its IBC interoperability, low transaction fees, and alignment with the decentralized, open-source ethos of this project. The Cosmos Grants Truth-seeking stream directly supports projects that use blockchain infrastructure to combat epistemic manipulation — which is the core mission of VeriTruth.
+| 🤖 **Multi-Agent Analysis** | Three specialized AI agents (OpenAI GPT-4o + Google Gemini 1.5) run in parallel, each with a distinct analytical lens |
+| 📊 **Proof of Reliability** | Weighted consensus algorithm produces a 0–100 reliability score and one of three verdicts |
+| ⛓️ **On-Chain Anchoring** | CosmWasm registry contract on Osmosis Testnet stores claim hash, score, and verdict permanently |
+| 🔴 **Live Analysis Stream** | Real-time progress interface shows each agent's status as it works |
+| 🕒 **Verification History** | All past verifications stored in database for longitudinal disinformation tracking |
+| 🔐 **Keplr Integration** | Users sign and broadcast anchor transactions directly from the browser |
 
 ---
 
@@ -109,27 +69,89 @@ Cosmos was chosen for its IBC interoperability, low transaction fees, and alignm
 ┌─────────────────────────────────────────────────────────────────┐
 │                        VeriTruth Platform                       │
 ├─────────────────────────────────────────────────────────────────┤
-│  Frontend (React 19 + Tailwind 4)                               │
+│  Frontend (React 19 + Tailwind 4 + CosmJS + Keplr)              │
 │  ├── Claim Input Form                                           │
-│  ├── Live Analysis Stream (polling)                             │
+│  ├── Live Analysis Stream (real-time polling)                   │
 │  ├── Result Report + CosmosWallet (Keplr)                       │
 │  └── Verification History                                       │
 ├─────────────────────────────────────────────────────────────────┤
-│  Backend (Express + tRPC)                                       │
+│  Backend (Express + tRPC 11 + TypeScript)                       │
 │  ├── verify.submit → runAllAgents() → computeConsensus()        │
-│  ├── cosmos.getChainStatus → StargateClient (CosmJS)            │
-│  ├── cosmos.buildAnchorParams → SHA-256 proof generation        │
+│  ├── cosmos.getChainStatus → CosmWasm client (CosmJS)           │
+│  ├── cosmos.buildAnchorParams → SHA-256 proof + executeMsg      │
+│  ├── cosmos.checkOnChain → query contract registry              │
 │  └── cosmos.recordAnchor → persist txHash to DB                 │
 ├─────────────────────────────────────────────────────────────────┤
 │  AI Agent Layer                                                 │
-│  ├── Source Verification Agent (OpenAI GPT-4o)                  │
-│  ├── Logical Consistency Agent (Gemini 1.5 Pro)                 │
-│  └── Cross-Verification Agent (OpenAI GPT-4o)                   │
+│  ├── Source Verification Agent    (OpenAI GPT-4o)   — 35%      │
+│  ├── Logical Consistency Agent    (Gemini 1.5)      — 35%      │
+│  └── Cross-Verification Agent     (OpenAI GPT-4o)   — 30%      │
 ├─────────────────────────────────────────────────────────────────┤
 │  Cosmos Blockchain Layer                                        │
-│  └── On-chain proof anchor via Keplr + CosmJS SigningStargateClient │
+│  ├── Osmosis Testnet (osmo-test-5)                              │
+│  ├── CosmWasm Registry Contract (veritruth-registry)            │
+│  └── Keplr Wallet + CosmJS SigningCosmWasmClient                │
 └─────────────────────────────────────────────────────────────────┘
 ```
+
+---
+
+## CosmWasm Registry Contract
+
+The `veritruth-registry` contract is a CosmWasm smart contract written in **Rust**. It serves as the **immutable on-chain registry** for all verified claims.
+
+### Contract Messages
+
+```rust
+// Store a verification result on-chain
+ExecuteMsg::AnchorVerification {
+    claim_hash: String,       // SHA-256 of the original claim
+    reliability_score: u8,    // 0–100 Proof of Reliability score
+    verdict: String,          // "Verified" | "Suspicious" | "False"
+    agent_count: u8,          // Number of agents that participated
+}
+
+// Query a specific verification by claim hash
+QueryMsg::GetVerification { claim_hash: String }
+
+// Query paginated list of all verifications
+QueryMsg::ListVerifications { start_after: Option<String>, limit: Option<u32> }
+
+// Query aggregate statistics
+QueryMsg::Stats {}
+```
+
+### On-Chain Record Structure
+
+```rust
+pub struct VerificationRecord {
+    pub claim_hash: String,       // SHA-256 of the original claim text
+    pub reliability_score: u8,    // 0–100
+    pub verdict: String,          // "Verified" | "Suspicious" | "False"
+    pub agent_count: u8,          // Number of agents that participated
+    pub submitter: Addr,          // Cosmos address of the submitter
+    pub timestamp: u64,           // Unix timestamp
+}
+```
+
+**Network:** Osmosis Testnet (`osmo-test-5`)  
+**Explorer:** [testnet.mintscan.io/osmosis-testnet](https://testnet.mintscan.io/osmosis-testnet)  
+**Build:** `cargo build --target wasm32-unknown-unknown --release` → optimized with `wasm-opt`
+
+---
+
+## Proof of Reliability: Consensus Algorithm
+
+```
+Reliability Score = (source_score × 0.35) + (logic_score × 0.35) + (cross_score × 0.30)
+
+Verdict thresholds:
+  Score ≥ 70  →  ✅ Verified    — Claim is supported by credible evidence
+  Score 40–69 →  ⚠️ Suspicious  — Claim is ambiguous or has conflicting sources
+  Score < 40  →  ❌ False       — Claim is contradicted by evidence
+```
+
+Each agent returns a score (0–100), a detailed findings report, and a list of sources consulted. The consensus mechanism is deterministic, auditable, and reproducible.
 
 ---
 
@@ -137,12 +159,13 @@ Cosmos was chosen for its IBC interoperability, low transaction fees, and alignm
 
 | Layer | Technology |
 |---|---|
-| Frontend | React 19, Tailwind CSS 4, shadcn/ui |
-| Backend | Node.js, Express 4, tRPC 11 |
-| Database | MySQL (TiDB) via Drizzle ORM |
-| AI Agents | OpenAI GPT-4o, Google Gemini 1.5 Pro |
-| Blockchain | Cosmos Hub, CosmJS, Keplr Wallet |
-| Testing | Vitest |
+| **Frontend** | React 19, Tailwind CSS 4, shadcn/ui, Framer Motion, Wouter |
+| **Backend** | Node.js 22, Express 4, tRPC 11, TypeScript 5 |
+| **Database** | MySQL / TiDB via Drizzle ORM |
+| **AI Agents** | OpenAI GPT-4o, Google Gemini 1.5 Flash |
+| **Blockchain** | Cosmos SDK, CosmWasm 2.x, CosmJS 0.38, Keplr Wallet |
+| **Smart Contract** | Rust, CosmWasm, Osmosis Testnet (osmo-test-5) |
+| **Testing** | Vitest — 7 tests passing |
 
 ---
 
@@ -150,11 +173,9 @@ Cosmos was chosen for its IBC interoperability, low transaction fees, and alignm
 
 ### Prerequisites
 
-- Node.js 22+
-- pnpm 10+
-- Keplr browser extension (for blockchain anchoring)
-- OpenAI API key
-- Google Gemini API key
+- Node.js 22+, pnpm 10+
+- Rust + `wasm32-unknown-unknown` target (for contract development)
+- [Keplr Wallet](https://www.keplr.app/download) browser extension
 
 ### Installation
 
@@ -169,7 +190,63 @@ pnpm dev
 
 ### Environment Variables
 
-See [`.env.example`](.env.example) for all required variables.
+| Variable | Required | Description |
+|---|---|---|
+| `DATABASE_URL` | ✅ | MySQL connection string |
+| `OPENAI_API_KEY` | ✅ | OpenAI API key (Source & Cross-Verification agents) |
+| `GEMINI_API_KEY` | ✅ | Google Gemini API key (Logic Consistency agent) |
+| `COSMOS_CONTRACT_ADDRESS` | ⬜ | Deployed CosmWasm contract address |
+| `COSMOS_RPC_ENDPOINT` | ⬜ | Cosmos RPC endpoint (default: Osmosis Testnet) |
+
+### Run Tests
+
+```bash
+pnpm test
+# ✓ server/consensus.test.ts (6 tests)
+# ✓ server/auth.logout.test.ts (1 test)
+# Tests: 7 passed
+```
+
+### Build & Test CosmWasm Contract
+
+```bash
+cd contracts/veritruth-registry
+cargo test                    # 7 unit tests
+cargo build --target wasm32-unknown-unknown --release
+wasm-opt -Os -o veritruth_registry.wasm \
+  target/wasm32-unknown-unknown/release/veritruth_registry.wasm
+```
+
+---
+
+## Project Structure
+
+```
+veritruth/
+├── client/src/
+│   ├── pages/
+│   │   ├── Home.tsx                # Landing page + claim input form
+│   │   ├── VerificationLive.tsx    # Real-time agent analysis stream
+│   │   ├── VerificationResult.tsx  # Detailed result report
+│   │   └── History.tsx             # Past verifications
+│   └── components/
+│       └── CosmosWallet.tsx        # Keplr wallet + on-chain anchoring
+├── server/
+│   ├── agents.ts                   # Multi-agent AI logic (OpenAI + Gemini)
+│   ├── consensus.ts                # Proof of Reliability algorithm
+│   ├── cosmos.ts                   # Cosmos/CosmWasm integration
+│   ├── routers.ts                  # tRPC procedures
+│   └── db.ts                       # Database query helpers
+├── contracts/
+│   └── veritruth-registry/         # CosmWasm smart contract (Rust)
+│       └── src/
+│           ├── contract.rs         # Core contract logic
+│           ├── state.rs            # On-chain data structures
+│           ├── msg.rs              # Message types
+│           └── error.rs            # Error types
+└── drizzle/
+    └── schema.ts                   # Database schema
+```
 
 ---
 
@@ -177,26 +254,54 @@ See [`.env.example`](.env.example) for all required variables.
 
 This project directly addresses the **Truth-seeking: Cosmos × FIRE** grant stream:
 
-**Epistemic integrity** — VeriTruth uses a multi-agent consensus mechanism to resist single points of failure and manipulation, directly combating AI-generated disinformation.
+**Epistemic integrity** — VeriTruth uses a multi-agent consensus mechanism to resist single points of failure and manipulation, directly combating AI-generated disinformation at scale.
 
-**Blockchain accountability** — Verification results are anchored on-chain, creating an immutable public record that cannot be altered or censored.
+**Blockchain accountability** — Verification results are anchored via a CosmWasm registry contract, creating an immutable public record that cannot be altered or censored by any single actor.
 
-**Open-source ecosystem** — The entire codebase is MIT-licensed and designed for community extension, including adding new agent types, supporting additional LLM providers, and integrating with IBC-connected chains.
+**Open-source ecosystem** — The entire codebase is MIT-licensed and designed for community extension: new agent types, additional LLM providers, IBC-connected chains, and DAO governance are all on the roadmap.
 
-**Academic grounding** — The project is built on five peer-reviewed papers from 2025–2026, demonstrating rigorous research alignment.
+**Academic grounding** — The project is built on five peer-reviewed papers from 2025–2026, demonstrating rigorous research alignment with the Cosmos ecosystem's intellectual mission.
 
 ---
 
 ## Roadmap
 
-**Phase 1 (Current MVP):** Multi-agent analysis, Proof of Reliability score, Cosmos blockchain anchoring via Keplr.
+- [x] Multi-agent AI analysis (OpenAI + Gemini)
+- [x] Proof of Reliability consensus mechanism
+- [x] Real-time analysis stream UI
+- [x] Verification history database
+- [x] CosmWasm registry contract (Rust, 7 tests)
+- [x] Keplr wallet integration
+- [x] On-chain anchoring (memo + contract modes)
+- [ ] Deploy contract to Osmosis Testnet (public address)
+- [ ] IBC integration for cross-chain verification sharing
+- [ ] Public REST API for programmatic access
+- [ ] Decentralized agent network (community-run agents)
+- [ ] DAO governance for verdict disputes
 
-**Phase 2:** CosmWasm smart contract for on-chain verification registry; decentralized agent staking and slashing.
+---
 
-**Phase 3:** IBC integration to broadcast verification results across Cosmos-connected chains; DAO governance for agent parameter updates.
+## Contributing
+
+Contributions are welcome. Please open an issue first to discuss what you would like to change.
+
+```bash
+git checkout -b feature/your-feature-name
+git commit -m "feat: add your feature"
+git push origin feature/your-feature-name
+# Then open a Pull Request
+```
 
 ---
 
 ## License
 
-MIT © 2026 VeriTruth Contributors
+[MIT](LICENSE) © 2026 VeriTruth Contributors
+
+---
+
+<div align="center">
+
+Built for the Cosmos ecosystem &nbsp;·&nbsp; Applying for [Cosmos Grants — Truth-seeking Stream](https://grants.cosmos.institute)
+
+</div>
