@@ -1,29 +1,44 @@
 /**
  * VeriTruth — Cosmos Blockchain Integration
  *
- * Anchors verification results on-chain via Cosmos Hub Testnet (theta-testnet-001).
- * Each completed verification is recorded as a MsgSend memo containing a
- * compact JSON proof: { id, claim_hash, score, verdict, timestamp }.
+ * Two-layer on-chain anchoring:
+ *   1. Memo-based (Keplr wallet, client-side): lightweight, no gas cost for server
+ *   2. CosmWasm contract (server-side or Keplr): full on-chain registry with queryable state
  *
- * Architecture note: This module runs server-side only. The client-side Keplr
- * wallet flow is handled in the frontend CosmosWallet component, which signs
- * transactions locally and broadcasts them through the user's own wallet.
+ * Contract: veritruth-registry (deployed on Osmosis Testnet osmo-test-5)
+ * The contract stores: claim_hash, reliability_score, verdict, agent_count, anchored_by, timestamp
  */
 
+import { CosmWasmClient } from "@cosmjs/cosmwasm-stargate";
 import { StargateClient } from "@cosmjs/stargate";
 import { createHash } from "crypto";
 
-// Cosmos Hub Testnet (theta-testnet-001) — public RPC endpoint
-export const COSMOS_CHAIN_ID = "theta-testnet-001";
-export const COSMOS_RPC_ENDPOINT = "https://rpc.sentry-01.theta-testnet.polypore.xyz";
+// ─── Chain Configuration ──────────────────────────────────────────────────────
+
+/** Primary: Osmosis Testnet — CosmWasm enabled */
+export const COSMOS_CHAIN_ID = "osmo-test-5";
+export const COSMOS_RPC_ENDPOINT = "https://rpc.testnet.osmosis.zone";
+export const COSMOS_REST_ENDPOINT = "https://lcd.testnet.osmosis.zone";
+export const COSMOS_DENOM = "uosmo";
+export const COSMOS_EXPLORER = "https://testnet.mintscan.io/osmosis-testnet";
+export const COSMOS_FAUCET = "https://faucet.testnet.osmosis.zone";
+
+/** Fallback: Cosmos Hub Mainnet (read-only, no CosmWasm) */
 export const COSMOS_RPC_FALLBACK = "https://cosmos-rpc.publicnode.com:443";
-export const COSMOS_REST_ENDPOINT = "https://rest.sentry-01.theta-testnet.polypore.xyz";
-export const COSMOS_EXPLORER = "https://explorer.polypore.xyz/theta-testnet-001";
-export const COSMOS_DENOM = "uatom";
+
+/**
+ * CosmWasm contract address on Osmosis Testnet.
+ * Set COSMOS_CONTRACT_ADDRESS env var after deploying with:
+ *   cd contracts/veritruth-registry && MNEMONIC="..." node deploy.mjs
+ */
+export const COSMOS_CONTRACT_ADDRESS =
+  process.env.COSMOS_CONTRACT_ADDRESS ?? "";
+
+// ─── Proof Utilities ──────────────────────────────────────────────────────────
 
 /**
  * Builds a compact, deterministic proof object for a verification result.
- * This is stored as the memo of a Cosmos transaction.
+ * Used as the memo of a Cosmos transaction (memo-based anchoring).
  */
 export function buildVerificationProof(params: {
   verificationId: number;
@@ -37,7 +52,7 @@ export function buildVerificationProof(params: {
     app: "veritruth",
     version: "1.0",
     id: params.verificationId,
-    claim_hash: claimHash.slice(0, 16), // First 8 bytes for brevity
+    claim_hash: claimHash.slice(0, 16),
     score: params.reliabilityScore,
     verdict: params.verdict,
     agents: params.agentCount,
@@ -46,11 +61,14 @@ export function buildVerificationProof(params: {
   return JSON.stringify(proof);
 }
 
-/**
- * Fetches current chain status from the Cosmos testnet RPC.
- * Returns block height, chain ID, and network info.
- */
-async function tryConnect(endpoint: string) {
+/** Returns the SHA-256 hash of a claim string (hex, full 64 chars). */
+export function hashClaim(claim: string): string {
+  return createHash("sha256").update(claim).digest("hex");
+}
+
+// ─── Chain Status ─────────────────────────────────────────────────────────────
+
+async function tryConnectStargate(endpoint: string) {
   const client = await StargateClient.connect(endpoint);
   const height = await client.getHeight();
   const chainId = await client.getChainId();
@@ -64,17 +82,21 @@ export async function getChainStatus(): Promise<{
   blockHeight: number;
   rpcEndpoint: string;
   explorerUrl: string;
+  contractAddress: string;
+  contractDeployed: boolean;
 }> {
   const endpoints = [COSMOS_RPC_ENDPOINT, COSMOS_RPC_FALLBACK];
   for (const endpoint of endpoints) {
     try {
-      const { height, chainId } = await tryConnect(endpoint);
+      const { height, chainId } = await tryConnectStargate(endpoint);
       return {
         connected: true,
         chainId,
         blockHeight: height,
         rpcEndpoint: endpoint,
         explorerUrl: COSMOS_EXPLORER,
+        contractAddress: COSMOS_CONTRACT_ADDRESS,
+        contractDeployed: COSMOS_CONTRACT_ADDRESS.length > 0,
       };
     } catch {
       // try next endpoint
@@ -87,12 +109,89 @@ export async function getChainStatus(): Promise<{
     blockHeight: 0,
     rpcEndpoint: COSMOS_RPC_ENDPOINT,
     explorerUrl: COSMOS_EXPLORER,
+    contractAddress: COSMOS_CONTRACT_ADDRESS,
+    contractDeployed: false,
   };
 }
 
+// ─── CosmWasm Contract Queries ────────────────────────────────────────────────
+
 /**
- * Verifies that a given transaction hash exists on-chain and
- * returns its memo (the anchored proof).
+ * Queries the on-chain registry for a specific verification by its claim hash.
+ * Returns null if the contract is not deployed or the entry is not found.
+ */
+export async function queryContractVerification(claimHash: string): Promise<{
+  claim_hash: string;
+  reliability_score: number;
+  verdict: string;
+  agent_count: number;
+  anchored_by: string;
+  timestamp: number;
+} | null> {
+  if (!COSMOS_CONTRACT_ADDRESS) return null;
+  try {
+    const client = await CosmWasmClient.connect(COSMOS_RPC_ENDPOINT);
+    const result = await client.queryContractSmart(COSMOS_CONTRACT_ADDRESS, {
+      get_verification: { claim_hash: claimHash },
+    });
+    await client.disconnect();
+    return result;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Queries aggregate stats from the on-chain registry.
+ */
+export async function queryContractStats(): Promise<{
+  total_verifications: number;
+  verified_count: number;
+  suspicious_count: number;
+  false_count: number;
+} | null> {
+  if (!COSMOS_CONTRACT_ADDRESS) return null;
+  try {
+    const client = await CosmWasmClient.connect(COSMOS_RPC_ENDPOINT);
+    const result = await client.queryContractSmart(COSMOS_CONTRACT_ADDRESS, {
+      stats: {},
+    });
+    await client.disconnect();
+    return result;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Lists recent verifications from the on-chain registry.
+ */
+export async function queryContractList(
+  limit = 10,
+  startAfter?: string
+): Promise<Array<{
+  claim_hash: string;
+  verdict: string;
+  reliability_score: number;
+  timestamp: number;
+}> | null> {
+  if (!COSMOS_CONTRACT_ADDRESS) return null;
+  try {
+    const client = await CosmWasmClient.connect(COSMOS_RPC_ENDPOINT);
+    const result = await client.queryContractSmart(COSMOS_CONTRACT_ADDRESS, {
+      list_verifications: { limit, start_after: startAfter },
+    });
+    await client.disconnect();
+    return result?.verifications ?? [];
+  } catch {
+    return null;
+  }
+}
+
+// ─── Transaction Verification ─────────────────────────────────────────────────
+
+/**
+ * Verifies that a given transaction hash exists on-chain.
  */
 export async function verifyOnChainAnchor(txHash: string): Promise<{
   found: boolean;
@@ -104,15 +203,11 @@ export async function verifyOnChainAnchor(txHash: string): Promise<{
     const client = await StargateClient.connect(COSMOS_RPC_ENDPOINT);
     const tx = await client.getTx(txHash);
     await client.disconnect();
-
     if (!tx) return { found: false };
-
-    // Extract memo from raw transaction
-    const memo = tx.rawLog ?? "";
     return {
       found: true,
       height: tx.height,
-      memo,
+      memo: tx.rawLog ?? "",
     };
   } catch (error) {
     console.error("[Cosmos] Failed to verify anchor:", error);
@@ -120,25 +215,52 @@ export async function verifyOnChainAnchor(txHash: string): Promise<{
   }
 }
 
+// ─── Frontend Tx Builder ──────────────────────────────────────────────────────
+
 /**
- * Generates the Keplr-compatible transaction object for the frontend to sign.
+ * Generates the Keplr-compatible transaction parameters for the frontend to sign.
  * The client signs this with their Keplr wallet and broadcasts it.
+ *
+ * Two modes:
+ *   - memo: lightweight self-transfer with proof in memo (no contract required)
+ *   - contract: execute AnchorVerification on the CosmWasm registry
  */
 export function buildAnchorTxParams(params: {
   senderAddress: string;
   proof: string;
+  claimHash: string;
+  reliabilityScore: number;
+  verdict: string;
+  agentCount: number;
 }): {
   chainId: string;
   rpcEndpoint: string;
+  denom: string;
   memo: string;
   senderAddress: string;
-  instructions: string;
+  contractAddress: string;
+  contractDeployed: boolean;
+  executeMsg: object;
+  explorerUrl: string;
+  faucetUrl: string;
 } {
   return {
     chainId: COSMOS_CHAIN_ID,
     rpcEndpoint: COSMOS_RPC_ENDPOINT,
+    denom: COSMOS_DENOM,
     memo: params.proof,
     senderAddress: params.senderAddress,
-    instructions: `Send a 0 ATOM self-transfer with the following memo to anchor this verification on the Cosmos Hub Testnet: ${params.proof}`,
+    contractAddress: COSMOS_CONTRACT_ADDRESS,
+    contractDeployed: COSMOS_CONTRACT_ADDRESS.length > 0,
+    executeMsg: {
+      anchor_verification: {
+        claim_hash: params.claimHash,
+        reliability_score: params.reliabilityScore,
+        verdict: params.verdict,
+        agent_count: params.agentCount,
+      },
+    },
+    explorerUrl: COSMOS_EXPLORER,
+    faucetUrl: COSMOS_FAUCET,
   };
 }

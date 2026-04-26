@@ -1,0 +1,1 @@
+{"name":"veritruth-registry-deploy","version":"1.0.0","type":"module","dependencies":{"@cosmjs/cosmwasm-stargate":"^0.38.1","@cosmjs/proto-signing":"^0.38.1","@cosmjs/stargate":"^0.38.1"}}

@@ -1,0 +1,36 @@
+[package]
+name = "veritruth-registry"
+version = "1.0.0"
+authors = ["VeriTruth Contributors"]
+edition = "2021"
+description = "VeriTruth on-chain verification registry — stores immutable proof-of-reliability records"
+license = "MIT"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[features]
+# Use library feature to disable entry points for integration tests
+library = []
+
+[dependencies]
+cosmwasm-std = { version = "2.2", features = ["staking"] }
+cosmwasm-schema = "2.2"
+cw-storage-plus = "2.0"
+schemars = "0.8"
+serde = { version = "1.0", default-features = false, features = ["derive"] }
+thiserror = "1.0"
+
+[dev-dependencies]
+cosmwasm-vm = { version = "2.2", default-features = false }
+
+[profile.release]
+opt-level = 3
+debug = false
+rpath = false
+lto = true
+debug-assertions = false
+codegen-units = 1
+panic = "abort"
+incremental = false
+overflow-checks = true

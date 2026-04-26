@@ -16,6 +16,7 @@
     "@aws-sdk/client-s3": "^3.693.0",
     "@aws-sdk/s3-request-presigner": "^3.693.0",
     "@cosmjs/amino": "^0.38.1",
+    "@cosmjs/cosmwasm-stargate": "^0.38.1",
     "@cosmjs/encoding": "^0.38.1",
     "@cosmjs/proto-signing": "^0.38.1",
     "@cosmjs/stargate": "^0.38.1",

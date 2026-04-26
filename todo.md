@@ -35,3 +35,18 @@
 - [x] Frontend: Result sayfasına "Anchor to Cosmos" butonu ve on-chain kayıt UI
 - [x] Frontend: Zincir durumu göstergesi (bağlı ağ, blok yüksekliği)
 - [x] README.md güncelle - Cosmos entegrasyonu bölümü ekle
+
+## CosmWasm Akıllı Sözleşmesi
+- [ ] Rust + CosmWasm geliştirme ortamını kur (rustup, wasm32 target, cargo-generate)
+- [ ] contracts/veritruth-registry/ dizininde kontrat scaffold oluştur
+- [ ] Kontrat: AnchorVerification mesajı (store proof on-chain)
+- [ ] Kontrat: QueryVerification sorgusu (id ile proof getir)
+- [ ] Kontrat: QueryAllVerifications sorgusu (tüm kayıtlar)
+- [ ] Kontrat: unit testleri yaz
+- [ ] Kontratı wasm olarak derle ve optimize et
+- [ ] Cosmos testnet'e deploy et (wasmd CLI veya CosmJS)
+- [ ] server/cosmos.ts: kontrat execute/query fonksiyonları ekle
+- [ ] tRPC router: cosmos.anchorToContract ve cosmos.queryContract prosedürleri
+- [ ] Frontend: sonuç sayfasında kontrat adresini ve on-chain kayıt linkini göster
+- [ ] README.md: CosmWasm kontrat bölümü ekle
+- [ ] GitHub'a push et

@@ -20,6 +20,12 @@ import {
   buildVerificationProof,
   buildAnchorTxParams,
   verifyOnChainAnchor,
+  hashClaim,
+  queryContractVerification,
+  queryContractStats,
+  COSMOS_EXPLORER,
+  COSMOS_CONTRACT_ADDRESS,
+  COSMOS_CHAIN_ID,
 } from "./cosmos";
 
 export const appRouter = router({
@@ -107,15 +113,53 @@ export const appRouter = router({
 
   cosmos: router({
     /**
-     * Returns current Cosmos testnet chain status (block height, chain ID).
+     * Returns current Cosmos chain status + contract deployment info.
      */
     getChainStatus: publicProcedure.query(async () => {
       return getChainStatus();
     }),
 
     /**
-     * Builds the proof object and Keplr transaction params for the frontend to sign.
-     * The actual signing and broadcasting is done client-side via Keplr.
+     * Returns on-chain registry stats (total verifications, verdicts breakdown).
+     * Queries the CosmWasm contract if deployed.
+     */
+    getContractStats: publicProcedure.query(async () => {
+      const stats = await queryContractStats();
+      return {
+        contractDeployed: COSMOS_CONTRACT_ADDRESS.length > 0,
+        contractAddress: COSMOS_CONTRACT_ADDRESS,
+        stats,
+      };
+    }),
+
+    /**
+     * Checks if a verification has been anchored on-chain by querying the contract.
+     */
+    checkOnChain: publicProcedure
+      .input(z.object({ verificationId: z.number() }))
+      .query(async ({ input }) => {
+        const verification = await getVerificationById(input.verificationId);
+        if (!verification) throw new Error("Verification not found");
+
+        const claimHash = hashClaim(verification.claim);
+        const onChainRecord = await queryContractVerification(claimHash);
+
+        return {
+          isAnchored: !!onChainRecord || !!verification.txHash,
+          txHash: verification.txHash,
+          cosmosAddress: verification.cosmosAddress,
+          anchoredAt: verification.anchoredAt,
+          onChainRecord,
+          claimHash,
+          explorerUrl: verification.txHash
+            ? `${COSMOS_EXPLORER}/txs/${verification.txHash}`
+            : null,
+        };
+      }),
+
+    /**
+     * Builds the proof object and Keplr/CosmWasm transaction params for the frontend.
+     * Supports both memo-based (lightweight) and CosmWasm contract anchoring.
      */
     buildAnchorParams: publicProcedure
       .input(
@@ -131,6 +175,7 @@ export const appRouter = router({
           throw new Error("Verification must be completed before anchoring");
         }
 
+        const claimHash = hashClaim(verification.claim);
         const proof = buildVerificationProof({
           verificationId: verification.id,
           claim: verification.claim,
@@ -142,9 +187,13 @@ export const appRouter = router({
         const txParams = buildAnchorTxParams({
           senderAddress: input.cosmosAddress,
           proof,
+          claimHash,
+          reliabilityScore: verification.reliabilityScore ?? 0,
+          verdict: verification.verdict ?? "Suspicious",
+          agentCount: 3,
         });
 
-        return { proof, txParams };
+        return { proof, txParams, claimHash };
       }),
 
     /**
@@ -168,12 +217,13 @@ export const appRouter = router({
         return {
           success: true,
           txHash: input.txHash,
-          explorerUrl: `https://explorer.polypore.xyz/theta-testnet-001/tx/${input.txHash}`,
+          explorerUrl: `${COSMOS_EXPLORER}/txs/${input.txHash}`,
+          chainId: COSMOS_CHAIN_ID,
         };
       }),
 
     /**
-     * Verifies an on-chain anchor by looking up the transaction on the testnet.
+     * Verifies an on-chain anchor by looking up the transaction.
      */
     verifyAnchor: publicProcedure
       .input(z.object({ txHash: z.string() }))
